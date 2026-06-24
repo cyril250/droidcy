@@ -23,5 +23,9 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
 
-    - name: Compile and Bundle Debug APK
-      run: gradle assembleDebug -x test -x lint
+    - name: Find Project Root and Compile APK
+      run: |
+        TARGET_DIR=$(find . -name "settings.gradle" -o -name "settings.gradle.kts" | head -n 1 | xargs dirname)
+        echo "Found Android project root at: $TARGET_DIR"
+        cd "$TARGET_DIR"
+        gradle assembleDebug -x test -x lint
